@@ -1,85 +1,135 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>ShopFlow - Smart Shopping List</title>
 
-<link rel="manifest" href="/manifest.webmanifest">
-<meta name="theme-color" content="#111111">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>ShopFlow - Smart Shopping List</title>
 
-    
-    <!-- Libraries -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
-    
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              background: '#f8fafc',
-              surface: '#ffffff',
-              primary: '#4f46e5',
-              secondary: '#64748b',
-              danger: '#ef4444',
-              success: '#10b981',
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#111111">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+
+
+  <!-- Libraries -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            background: '#f8fafc',
+            surface: '#ffffff',
+            primary: '#4f46e5',
+            secondary: '#64748b',
+            danger: '#ef4444',
+            success: '#10b981',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          animation: {
+            'pop': 'pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+            'fade-in': 'fadeIn 0.2s ease-out forwards',
+            'slide-up': 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+          },
+          keyframes: {
+            pop: {
+              '0%': { transform: 'scale(0.9)', opacity: '0' },
+              '100%': { transform: 'scale(1)', opacity: '1' }
             },
-            fontFamily: {
-              sans: ['Inter', 'system-ui', 'sans-serif'],
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' }
             },
-            animation: {
-              'pop': 'pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
-              'fade-in': 'fadeIn 0.2s ease-out forwards',
-              'slide-up': 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-            },
-            keyframes: {
-              pop: {
-                '0%': { transform: 'scale(0.9)', opacity: '0' },
-                '100%': { transform: 'scale(1)', opacity: '1' }
-              },
-              fadeIn: {
-                '0%': { opacity: '0' },
-                '100%': { opacity: '1' }
-              },
-              slideUp: {
-                '0%': { transform: 'translateY(100%)' },
-                '100%': { transform: 'translateY(0)' }
-              }
+            slideUp: {
+              '0%': { transform: 'translateY(100%)' },
+              '100%': { transform: 'translateY(0)' }
             }
           }
         }
       }
-    </script>
-    <style>
-      /* Utilities */
-      .no-scrollbar::-webkit-scrollbar { display: none; }
-      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-      body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-      
-      /* SortableJS Ghost/Drag Styles */
-      .sortable-ghost { opacity: 0.4; background-color: #f1f5f9; }
-      .sortable-drag { cursor: grabbing; opacity: 1 !important; background: white; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); transform: scale(1.02); z-index: 50; }
-      
-      /* Item Transition */
-      .item-row { transition: background-color 0.2s, border-color 0.2s, opacity 0.2s, color 0.2s, box-shadow 0.2s; }
-      .item-row.completed .item-text { text-decoration: line-through; color: #94a3b8; }
-      .item-row.completed .check-box { background-color: #10b981; border-color: #10b981; }
-      .item-row.completed.is-repeat { opacity: 0.6; background-color: #f8fafc; }
-      
-      /* Modal Overlay */
-      .modal-backdrop {
-        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(15, 23, 42, 0.2); backdrop-filter: blur(4px);
-        z-index: 100; display: flex; align-items: center; justify-content: center;
-        opacity: 0; pointer-events: none; transition: opacity 0.2s;
-      }
-      .modal-backdrop.active { opacity: 1; pointer-events: auto; }
-    </style>
+    }
+  </script>
+  <style>
+    /* Utilities */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+    }
+
+    /* SortableJS Ghost/Drag Styles */
+    .sortable-ghost {
+      opacity: 0.4;
+      background-color: #f1f5f9;
+    }
+
+    .sortable-drag {
+      cursor: grabbing;
+      opacity: 1 !important;
+      background: white;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      transform: scale(1.02);
+      z-index: 50;
+    }
+
+    /* Item Transition */
+    .item-row {
+      transition: background-color 0.2s, border-color 0.2s, opacity 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+
+    .item-row.completed .item-text {
+      text-decoration: line-through;
+      color: #94a3b8;
+    }
+
+    .item-row.completed .check-box {
+      background-color: #10b981;
+      border-color: #10b981;
+    }
+
+    .item-row.completed.is-repeat {
+      opacity: 0.6;
+      background-color: #f8fafc;
+    }
+
+    /* Modal Overlay */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.2);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  </style>
   <script type="importmap">
 {
   "imports": {
@@ -95,213 +145,273 @@
 }
 </script>
 </head>
-  <body>
-    <div id="root" class="min-h-screen bg-slate-50 flex flex-col md:flex-row md:justify-center">
-      <div class="w-full max-w-lg md:my-8 flex flex-col h-screen md:h-[85vh] bg-white md:rounded-2xl md:shadow-xl md:border md:border-slate-100 overflow-hidden relative">
-        
-        <!-- Header -->
-        <header class="bg-white p-4 border-b border-slate-100 z-10 flex justify-between items-center shrink-0">
+
+<body>
+  <div id="root" class="min-h-screen bg-slate-50 flex flex-col md:flex-row md:justify-center">
+    <div
+      class="w-full max-w-lg md:my-8 flex flex-col h-screen md:h-[85vh] bg-white md:rounded-2xl md:shadow-xl md:border md:border-slate-100 overflow-hidden relative">
+
+      <!-- Header -->
+      <header class="bg-white p-4 border-b border-slate-100 z-10 shrink-0">
+        <!-- Tab Buttons -->
+        <div class="flex gap-2 mb-3">
+          <button onclick="app.switchList('shopping')" id="tab-shopping"
+            class="flex-1 py-2 px-4 rounded-lg font-semibold text-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-primary bg-primary text-white shadow-sm">
+            買い物リスト
+          </button>
+          <button onclick="app.switchList('wishlist')" id="tab-wishlist"
+            class="flex-1 py-2 px-4 rounded-lg font-semibold text-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-300 bg-slate-100 text-slate-500 hover:bg-slate-200">
+            欲しいものリスト
+          </button>
+        </div>
+
+        <!-- Title and Actions -->
+        <div class="flex justify-between items-center">
           <div class="flex items-center gap-2">
             <div class="bg-primary/10 p-2 rounded-full">
-              <i data-lucide="shopping-cart" class="w-6 h-6 text-primary"></i>
+              <i data-lucide="shopping-cart" class="w-6 h-6 text-primary" id="header-icon"></i>
             </div>
-            <h1 class="text-xl font-bold text-slate-800 tracking-tight">買い物リスト</h1>
+            <h1 class="text-xl font-bold text-slate-800 tracking-tight" id="header-title">買い物リスト</h1>
           </div>
           <div class="flex gap-2">
-            <button id="btn-cleanup" onclick="app.cleanupItems()" disabled class="flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 h-8 px-3 text-xs bg-slate-100 text-slate-400 cursor-not-allowed">
+            <button id="btn-cleanup" onclick="app.cleanupItems()" disabled
+              class="flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 h-8 px-3 text-xs bg-slate-100 text-slate-400 cursor-not-allowed">
               <i data-lucide="trash-2" class="w-3.5 h-3.5 mr-1.5"></i>
               <span class="hidden sm:inline">削除</span> <span id="cleanup-count" style="display: none;"></span>
             </button>
           </div>
-        </header>
-
-        <!-- Scrollable List -->
-        <div id="groups-container" class="flex-1 overflow-y-auto overflow-x-hidden p-4 pb-24 md:pb-4 no-scrollbar">
         </div>
+      </header>
 
-        <!-- Empty State -->
-        <div id="empty-state" class="hidden flex-col items-center justify-center h-48 text-center px-6">
-          <p class="text-slate-400 mb-2">場所が登録されていません。</p>
-          <p class="text-sm text-slate-400">下のフォームから場所を追加してください。</p>
-        </div>
-
-        <!-- Add Item Form Area -->
-        <div id="form-container">
-          <!-- Mobile FAB -->
-          <button
-            onclick="app.toggleMobileForm(true)"
-            id="fab-btn"
-            class="md:hidden fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg flex items-center justify-center z-[60] transition-all duration-300 bg-primary text-white hover:bg-indigo-700 active:scale-95"
-            aria-label="追加する"
-          >
-            <i data-lucide="plus" class="w-8 h-8"></i>
-          </button>
-
-          <!-- Form Panel -->
-          <!-- Added pb-10 for mobile extra spacing -->
-          <div id="form-panel" class="bg-white border-t border-slate-200 p-4 pb-10 md:pb-4 fixed bottom-0 left-0 right-0 z-50 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)] transition-transform duration-300 translate-y-[110%] md:translate-y-0 md:relative md:transform-none md:z-0 md:shadow-none md:border-none">
-            
-            <button onclick="app.toggleMobileForm(false)" class="md:hidden absolute top-2 right-2 p-2 text-slate-400 hover:text-slate-600 bg-slate-100 rounded-full hover:bg-slate-200">
-              <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-
-            <!-- Tabs -->
-            <div class="flex gap-2 mb-3 mr-10 md:mr-0">
-              <button onclick="app.setFormMode('ITEM')" id="tab-item" class="flex-1 pb-2 text-sm font-medium border-b-2 transition-colors border-primary text-primary">商品を追加</button>
-              <button onclick="app.setFormMode('GROUP')" id="tab-group" class="flex-1 pb-2 text-sm font-medium border-b-2 transition-colors border-transparent text-slate-400">場所を追加</button>
-            </div>
-
-            <!-- Item Form -->
-            <form id="form-item" onsubmit="app.handleAddItem(event)" class="space-y-3 block">
-              <div class="flex gap-2">
-                <div class="relative flex-1">
-                  <i data-lucide="shopping-cart" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
-                  <input type="text" id="input-item-name" placeholder="何を買いますか？" class="w-full pl-9 pr-4 py-2 bg-slate-50 text-slate-900 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-400 text-base">
-                </div>
-              </div>
-              
-              <div class="flex items-center gap-2 justify-between">
-                <div class="flex items-center gap-2 flex-1 min-w-0">
-                  <div class="relative flex-1 max-w-[140px]" id="group-select-wrapper">
-                    <i data-lucide="store" class="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-500"></i>
-                    <select id="input-group-id" class="w-full pl-7 pr-2 py-1.5 text-base bg-slate-50 text-slate-900 border border-slate-300 rounded-md focus:ring-1 focus:ring-primary outline-none appearance-none truncate">
-                    </select>
-                  </div>
-                  <span id="no-groups-msg" class="text-xs text-red-500 hidden">場所を作成してください</span>
-
-                  <label class="flex items-center justify-center cursor-pointer p-2 rounded-md border transition-colors select-none bg-white border-slate-200 text-slate-300 hover:bg-slate-50" id="label-repeat">
-                    <input type="checkbox" id="input-is-repeat" class="sr-only" onchange="app.toggleRepeatStyle(this.checked)">
-                    <i data-lucide="refresh-cw" class="w-4 h-4" id="icon-repeat"></i>
-                  </label>
-                </div>
-
-                <button type="submit" id="btn-add-item" class="inline-flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:opacity-50 h-8 px-3 text-xs bg-primary text-white hover:bg-indigo-700 shadow-sm shrink-0">
-                  <i data-lucide="plus" class="w-4 h-4 mr-1"></i> 追加
-                </button>
-              </div>
-            </form>
-
-            <!-- Group Form -->
-            <form id="form-group" onsubmit="app.handleAddGroup(event)" class="flex gap-2 items-center hidden">
-              <div class="relative flex-1">
-                <i data-lucide="store" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
-                <input type="text" id="input-group-name" placeholder="場所の名前（例：スーパー）" class="w-full pl-9 pr-4 py-2 bg-slate-50 text-slate-900 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-400 text-base">
-              </div>
-              <button type="submit" id="btn-add-group" class="inline-flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:opacity-50 h-10 px-4 text-sm bg-primary text-white hover:bg-indigo-700 shadow-sm">
-                <i data-lucide="plus" class="w-4 h-4 mr-2"></i> 追加
-              </button>
-            </form>
-          </div>
-        </div>
+      <!-- Scrollable List -->
+      <div id="groups-container" class="flex-1 overflow-y-auto overflow-x-hidden p-4 pb-24 md:pb-4 no-scrollbar">
       </div>
-    </div>
 
-    <!-- Edit Group Modal -->
-    <div id="edit-modal" class="modal-backdrop">
-      <div class="relative w-full max-w-sm bg-white rounded-xl shadow-2xl overflow-hidden m-4 transform transition-all scale-100">
-        <div class="flex items-center justify-between p-4 border-b border-slate-100">
-          <h3 class="font-bold text-slate-700">場所を編集</h3>
-          <button onclick="app.closeModal()" class="p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100">
+      <!-- Empty State -->
+      <div id="empty-state" class="hidden flex-col items-center justify-center h-48 text-center px-6">
+        <p class="text-slate-400 mb-2">場所が登録されていません。</p>
+        <p class="text-sm text-slate-400">下のフォームから場所を追加してください。</p>
+      </div>
+
+      <!-- Add Item Form Area -->
+      <div id="form-container">
+        <!-- Mobile FAB -->
+        <button onclick="app.toggleMobileForm(true)" id="fab-btn"
+          class="md:hidden fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg flex items-center justify-center z-[60] transition-all duration-300 bg-primary text-white hover:bg-indigo-700 active:scale-95"
+          aria-label="追加する">
+          <i data-lucide="plus" class="w-8 h-8"></i>
+        </button>
+
+        <!-- Form Panel -->
+        <!-- Added pb-10 for mobile extra spacing -->
+        <div id="form-panel"
+          class="bg-white border-t border-slate-200 p-4 pb-10 md:pb-4 fixed bottom-0 left-0 right-0 z-50 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)] transition-transform duration-300 translate-y-[110%] md:translate-y-0 md:relative md:transform-none md:z-0 md:shadow-none md:border-none">
+
+          <button onclick="app.toggleMobileForm(false)"
+            class="md:hidden absolute top-2 right-2 p-2 text-slate-400 hover:text-slate-600 bg-slate-100 rounded-full hover:bg-slate-200">
             <i data-lucide="x" class="w-5 h-5"></i>
           </button>
-        </div>
-        <div class="p-5 space-y-5">
-          <div class="space-y-2">
-            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">名前</label>
-            <input type="text" id="edit-group-name" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary font-medium text-slate-800 text-base">
+
+          <!-- Tabs -->
+          <div class="flex gap-2 mb-3 mr-10 md:mr-0">
+            <button onclick="app.setFormMode('ITEM')" id="tab-item"
+              class="flex-1 pb-2 text-sm font-medium border-b-2 transition-colors border-primary text-primary">商品を追加</button>
+            <button onclick="app.setFormMode('GROUP')" id="tab-group"
+              class="flex-1 pb-2 text-sm font-medium border-b-2 transition-colors border-transparent text-slate-400">場所を追加</button>
           </div>
-          <div class="space-y-2">
-            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">テーマカラー</label>
-            <div class="flex flex-wrap gap-3" id="color-picker-container">
+
+          <!-- Item Form -->
+          <form id="form-item" onsubmit="app.handleAddItem(event)" class="space-y-3 block">
+            <div class="flex gap-2">
+              <div class="relative flex-1">
+                <i data-lucide="shopping-cart"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+                <input type="text" id="input-item-name" placeholder="何を買いますか？"
+                  class="w-full pl-9 pr-4 py-2 bg-slate-50 text-slate-900 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-400 text-base">
+              </div>
             </div>
-          </div>
-        </div>
-        <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
-          <button onclick="app.deleteCurrentGroup()" class="flex items-center gap-1.5 px-3 py-2 text-sm text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors">
-            <i data-lucide="trash-2" class="w-4 h-4"></i> <span class="font-medium">削除</span>
-          </button>
-          <button onclick="app.saveGroupEdit()" class="px-6 py-2 bg-primary text-white font-bold rounded-lg shadow-md hover:bg-indigo-700">保存</button>
+
+            <div class="flex items-center gap-2 justify-between">
+              <div class="flex items-center gap-2 flex-1 min-w-0">
+                <div class="relative flex-1 max-w-[140px]" id="group-select-wrapper">
+                  <i data-lucide="store" class="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-500"></i>
+                  <select id="input-group-id"
+                    class="w-full pl-7 pr-2 py-1.5 text-base bg-slate-50 text-slate-900 border border-slate-300 rounded-md focus:ring-1 focus:ring-primary outline-none appearance-none truncate">
+                  </select>
+                </div>
+                <span id="no-groups-msg" class="text-xs text-red-500 hidden">場所を作成してください</span>
+
+                <label
+                  class="flex items-center justify-center cursor-pointer p-2 rounded-md border transition-colors select-none bg-white border-slate-200 text-slate-300 hover:bg-slate-50"
+                  id="label-repeat">
+                  <input type="checkbox" id="input-is-repeat" class="sr-only"
+                    onchange="app.toggleRepeatStyle(this.checked)">
+                  <i data-lucide="refresh-cw" class="w-4 h-4" id="icon-repeat"></i>
+                </label>
+              </div>
+
+              <button type="submit" id="btn-add-item"
+                class="inline-flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:opacity-50 h-8 px-3 text-xs bg-primary text-white hover:bg-indigo-700 shadow-sm shrink-0">
+                <i data-lucide="plus" class="w-4 h-4 mr-1"></i> 追加
+              </button>
+            </div>
+          </form>
+
+          <!-- Group Form -->
+          <form id="form-group" onsubmit="app.handleAddGroup(event)" class="flex gap-2 items-center hidden">
+            <div class="relative flex-1">
+              <i data-lucide="store" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+              <input type="text" id="input-group-name" placeholder="場所の名前（例：スーパー）"
+                class="w-full pl-9 pr-4 py-2 bg-slate-50 text-slate-900 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-400 text-base">
+            </div>
+            <button type="submit" id="btn-add-group"
+              class="inline-flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:opacity-50 h-10 px-4 text-sm bg-primary text-white hover:bg-indigo-700 shadow-sm">
+              <i data-lucide="plus" class="w-4 h-4 mr-2"></i> 追加
+            </button>
+          </form>
         </div>
       </div>
     </div>
+  </div>
 
-    <script>
-      const app = (() => {
-        const STORAGE_KEY = 'shopflow-data';
-        const COLORS = {
-          slate: { bg: 'bg-slate-100', border: 'border-slate-200', text: 'text-slate-700', icon: 'text-slate-400', ring: 'ring-slate-300' },
-          red: { bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-700', icon: 'text-red-500', ring: 'ring-red-300' },
-          orange: { bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-700', icon: 'text-orange-500', ring: 'ring-orange-300' },
-          green: { bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-700', icon: 'text-green-500', ring: 'ring-green-300' },
-          blue: { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', icon: 'text-blue-500', ring: 'ring-blue-300' },
-          indigo: { bg: 'bg-indigo-50', border: 'border-indigo-200', text: 'text-indigo-700', icon: 'text-indigo-500', ring: 'ring-indigo-300' },
-          purple: { bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', icon: 'text-purple-500', ring: 'ring-purple-300' },
-          pink: { bg: 'bg-pink-50', border: 'border-pink-200', text: 'text-pink-700', icon: 'text-pink-500', ring: 'ring-pink-300' },
-        };
-        const COLOR_KEYS = Object.keys(COLORS);
+  <!-- Edit Group Modal -->
+  <div id="edit-modal" class="modal-backdrop">
+    <div
+      class="relative w-full max-w-sm bg-white rounded-xl shadow-2xl overflow-hidden m-4 transform transition-all scale-100">
+      <div class="flex items-center justify-between p-4 border-b border-slate-100">
+        <h3 class="font-bold text-slate-700">場所を編集</h3>
+        <button onclick="app.closeModal()"
+          class="p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="p-5 space-y-5">
+        <div class="space-y-2">
+          <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">名前</label>
+          <input type="text" id="edit-group-name"
+            class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary font-medium text-slate-800 text-base">
+        </div>
+        <div class="space-y-2">
+          <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">テーマカラー</label>
+          <div class="flex flex-wrap gap-3" id="color-picker-container">
+          </div>
+        </div>
+      </div>
+      <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
+        <button onclick="app.deleteCurrentGroup()"
+          class="flex items-center gap-1.5 px-3 py-2 text-sm text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors">
+          <i data-lucide="trash-2" class="w-4 h-4"></i> <span class="font-medium">削除</span>
+        </button>
+        <button onclick="app.saveGroupEdit()"
+          class="px-6 py-2 bg-primary text-white font-bold rounded-lg shadow-md hover:bg-indigo-700">保存</button>
+      </div>
+    </div>
+  </div>
 
-        let groups = [];
-        let editingGroupId = null;
-        let editingColor = 'slate';
+  <script>
+    const app = (() => {
+      const STORAGE_KEY = 'shopflow-data';
+      const COLORS = {
+        slate: { bg: 'bg-slate-100', border: 'border-slate-200', text: 'text-slate-700', icon: 'text-slate-400', ring: 'ring-slate-300' },
+        red: { bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-700', icon: 'text-red-500', ring: 'ring-red-300' },
+        orange: { bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-700', icon: 'text-orange-500', ring: 'ring-orange-300' },
+        green: { bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-700', icon: 'text-green-500', ring: 'ring-green-300' },
+        blue: { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', icon: 'text-blue-500', ring: 'ring-blue-300' },
+        indigo: { bg: 'bg-indigo-50', border: 'border-indigo-200', text: 'text-indigo-700', icon: 'text-indigo-500', ring: 'ring-indigo-300' },
+        purple: { bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', icon: 'text-purple-500', ring: 'ring-purple-300' },
+        pink: { bg: 'bg-pink-50', border: 'border-pink-200', text: 'text-pink-700', icon: 'text-pink-500', ring: 'ring-pink-300' },
+      };
+      const COLOR_KEYS = Object.keys(COLORS);
 
-        function init() {
-          loadData();
-          render();
-          initDragAndDrop();
-          if (window.innerWidth >= 768) {
-             const input = document.getElementById('input-item-name');
-             if(input) input.focus();
-          }
+      let activeList = 'shopping'; // 'shopping' or 'wishlist'
+      let data = {
+        shopping: { groups: [] },
+        wishlist: { groups: [] }
+      };
+      let editingGroupId = null;
+      let editingColor = 'slate';
+
+      function init() {
+        loadData();
+        render();
+        initDragAndDrop();
+        if (window.innerWidth >= 768) {
+          const input = document.getElementById('input-item-name');
+          if (input) input.focus();
         }
+      }
 
-        function generateId() {
-          return crypto.randomUUID();
-        }
+      function generateId() {
+        return crypto.randomUUID();
+      }
 
-        function loadData() {
-          const saved = localStorage.getItem(STORAGE_KEY);
-          if (saved) {
-            groups = JSON.parse(saved);
+      function loadData() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          // Migration: old format to new format
+          if (Array.isArray(parsed)) {
+            data = {
+              shopping: { groups: parsed },
+              wishlist: { groups: [{ id: 'g-wishlist', name: '欲しいもの', items: [], color: 'purple' }] }
+            };
+            activeList = 'shopping';
           } else {
-            groups = [
-              { id: 'g-supermarket', name: 'スーパー', items: [], color: 'indigo' },
-              { id: 'g-drugstore', name: 'ドラッグストア', items: [], color: 'blue' },
-            ];
+            data = parsed.data || parsed;
+            activeList = parsed.activeList || 'shopping';
           }
+        } else {
+          data = {
+            shopping: {
+              groups: [
+                { id: 'g-supermarket', name: 'スーパー', items: [], color: 'indigo' },
+                { id: 'g-drugstore', name: 'ドラッグストア', items: [], color: 'blue' },
+              ]
+            },
+            wishlist: {
+              groups: [
+                { id: 'g-wishlist', name: '欲しいもの', items: [], color: 'purple' }
+              ]
+            }
+          };
+          activeList = 'shopping';
         }
+      }
 
-        function saveData() {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(groups));
-          updateCleanupButton();
+      function saveData() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ activeList, data }));
+        updateCleanupButton();
+      }
+
+      function render() {
+        const groups = data[activeList].groups;
+        const container = document.getElementById('groups-container');
+        const emptyState = document.getElementById('empty-state');
+        container.innerHTML = '';
+        if (groups.length === 0) {
+          emptyState.classList.remove('hidden');
+          emptyState.classList.add('flex');
+        } else {
+          emptyState.classList.add('hidden');
+          emptyState.classList.remove('flex');
+          groups.forEach(group => {
+            container.appendChild(createGroupElement(group));
+          });
         }
+        updateGroupSelect();
+        updateCleanupButton();
+        updateTabButtons();
+        lucide.createIcons();
+        initItemSortables();
+      }
 
-        function render() {
-          const container = document.getElementById('groups-container');
-          const emptyState = document.getElementById('empty-state');
-          container.innerHTML = '';
-          if (groups.length === 0) {
-            emptyState.classList.remove('hidden');
-            emptyState.classList.add('flex');
-          } else {
-            emptyState.classList.add('hidden');
-            emptyState.classList.remove('flex');
-            groups.forEach(group => {
-              container.appendChild(createGroupElement(group));
-            });
-          }
-          updateGroupSelect();
-          updateCleanupButton();
-          lucide.createIcons();
-          initItemSortables();
-        }
+      function createGroupElement(group) {
+        const style = COLORS[group.color || 'slate'];
+        const el = document.createElement('div');
+        el.className = `group-card ${style.bg} rounded-xl p-3 mb-4 border ${style.border} shadow-sm flex flex-col transition-colors duration-200`;
+        el.setAttribute('data-group-id', group.id);
 
-        function createGroupElement(group) {
-          const style = COLORS[group.color || 'slate'];
-          const el = document.createElement('div');
-          el.className = `group-card ${style.bg} rounded-xl p-3 mb-4 border ${style.border} shadow-sm flex flex-col transition-colors duration-200`;
-          el.setAttribute('data-group-id', group.id);
-          
-          el.innerHTML = `
+        el.innerHTML = `
             <div class="group-header mb-3 px-1 min-h-[32px] flex items-center justify-between">
               <div class="flex items-center gap-2 overflow-hidden flex-1">
                 <div class="js-group-drag-handle cursor-grab active:cursor-grabbing p-1 -ml-1 text-slate-400 hover:text-slate-600 rounded hover:bg-slate-200/50 flex-shrink-0 touch-none">
@@ -322,27 +432,27 @@
               </div>
             </div>
             <div class="items-list min-h-[50px] flex-1" data-group-id="${group.id}">
-              ${group.items.length === 0 
-                ? createEmptyPlaceholderHTML(group.id)
-                : group.items.map(item => createItemHTML(item)).join('')}
+              ${group.items.length === 0
+            ? createEmptyPlaceholderHTML(group.id)
+            : group.items.map(item => createItemHTML(item)).join('')}
             </div>
           `;
-          return el;
-        }
+        return el;
+      }
 
-        function createEmptyPlaceholderHTML(groupId) {
-          return `
+      function createEmptyPlaceholderHTML(groupId) {
+        return `
             <button onclick="app.openFormForItemInGroup('${groupId}')" class="empty-placeholder w-full h-16 border-2 border-dashed border-slate-200 hover:border-primary/50 hover:bg-white/50 rounded-xl flex items-center justify-center text-slate-400 hover:text-primary transition-all group/empty">
               <i data-lucide="plus" class="w-6 h-6 transition-transform group-hover/empty:scale-125"></i>
             </button>
           `;
-        }
+      }
 
-        function createItemHTML(item) {
-          const isChecked = item.isChecked;
-          const isRepeat = item.isRepeat;
-          const isDimmed = isChecked && isRepeat;
-          return `
+      function createItemHTML(item) {
+        const isChecked = item.isChecked;
+        const isRepeat = item.isRepeat;
+        const isDimmed = isChecked && isRepeat;
+        return `
             <div class="item-row group flex items-center gap-3 p-3 mb-2 bg-white rounded-lg border shadow-sm select-none ${isDimmed ? 'opacity-60 bg-slate-50' : 'hover:border-primary/30'} ${isChecked ? 'completed' : ''} ${isRepeat ? 'is-repeat' : ''}" data-item-id="${item.id}">
               <div class="item-handle touch-none cursor-grab active:cursor-grabbing text-slate-300 hover:text-slate-500">
                 <i data-lucide="grip-vertical" class="w-5 h-5"></i>
@@ -358,386 +468,441 @@
               </div>
             </div>
           `;
+      }
+
+      function updateGroupSelect() {
+        const groups = data[activeList].groups;
+        const select = document.getElementById('input-group-id');
+        const wrapper = document.getElementById('group-select-wrapper');
+        const noGroupsMsg = document.getElementById('no-groups-msg');
+        const btnAdd = document.getElementById('btn-add-item');
+
+        const previousValue = select.value;
+
+        select.innerHTML = '';
+        if (groups.length > 0) {
+          groups.forEach(g => {
+            const opt = document.createElement('option');
+            opt.value = g.id;
+            opt.textContent = g.name;
+            select.appendChild(opt);
+          });
+
+          if (previousValue && groups.some(g => g.id === previousValue)) {
+            select.value = previousValue;
+          }
+
+          wrapper.classList.remove('hidden');
+          noGroupsMsg.classList.add('hidden');
+          btnAdd.disabled = false;
+        } else {
+          wrapper.classList.add('hidden');
+          noGroupsMsg.classList.remove('hidden');
+          btnAdd.disabled = true;
         }
+      }
 
-        function updateGroupSelect() {
-          const select = document.getElementById('input-group-id');
-          const wrapper = document.getElementById('group-select-wrapper');
-          const noGroupsMsg = document.getElementById('no-groups-msg');
-          const btnAdd = document.getElementById('btn-add-item');
-          
-          const previousValue = select.value;
+      function updateCleanupButton() {
+        const groups = data[activeList].groups;
+        let count = 0;
+        groups.forEach(g => g.items.forEach(i => { if (i.isChecked) count++; }));
+        const btn = document.getElementById('btn-cleanup');
+        const countSpan = document.getElementById('cleanup-count');
+        const inactiveClasses = ['bg-slate-100', 'text-slate-400', 'cursor-not-allowed'];
+        const activeClasses = ['bg-red-50', 'text-red-600', 'hover:bg-red-100', 'focus:ring-red-500'];
+        if (count > 0) {
+          btn.disabled = false;
+          btn.classList.remove(...inactiveClasses);
+          btn.classList.add(...activeClasses);
+          countSpan.textContent = `(${count})`;
+          countSpan.style.display = 'inline';
+        } else {
+          btn.disabled = true;
+          btn.classList.remove(...activeClasses);
+          btn.classList.add(...inactiveClasses);
+          countSpan.textContent = '';
+          countSpan.style.display = 'none';
+        }
+      }
 
-          select.innerHTML = '';
-          if (groups.length > 0) {
-            groups.forEach(g => {
-              const opt = document.createElement('option');
-              opt.value = g.id;
-              opt.textContent = g.name;
-              select.appendChild(opt);
-            });
-            
-            if (previousValue && groups.some(g => g.id === previousValue)) {
-              select.value = previousValue;
-            }
+      function handleAddItem(e) {
+        e.preventDefault();
+        const groups = data[activeList].groups;
+        const nameInput = document.getElementById('input-item-name');
+        const groupSelect = document.getElementById('input-group-id');
+        const isRepeatInput = document.getElementById('input-is-repeat');
+        const name = nameInput.value.trim();
+        const groupId = groupSelect.value;
+        if (!name || !groupId) return;
+        const groupIndex = groups.findIndex(g => g.id === groupId);
+        if (groupIndex === -1) return;
+        const newItem = {
+          id: generateId(),
+          name: name,
+          isChecked: false,
+          isRepeat: isRepeatInput.checked,
+          groupId: groupId
+        };
+        groups[groupIndex].items.unshift(newItem);
+        saveData();
+        render();
+        nameInput.value = '';
+        isRepeatInput.checked = false;
+        toggleRepeatStyle(false);
+        nameInput.focus();
+      }
 
-            wrapper.classList.remove('hidden');
-            noGroupsMsg.classList.add('hidden');
-            btnAdd.disabled = false;
-          } else {
-            wrapper.classList.add('hidden');
-            noGroupsMsg.classList.remove('hidden');
-            btnAdd.disabled = true;
+      function handleAddGroup(e) {
+        e.preventDefault();
+        const groups = data[activeList].groups;
+        const nameInput = document.getElementById('input-group-name');
+        const name = nameInput.value.trim();
+        if (!name) return;
+        const newGroup = {
+          id: generateId(),
+          name: name,
+          items: [],
+          color: 'slate'
+        };
+        groups.push(newGroup);
+        saveData();
+        nameInput.value = '';
+        render();
+        nameInput.focus();
+
+        setTimeout(() => {
+          document.getElementById('input-group-id').value = newGroup.id;
+        }, 0);
+      }
+
+      function openFormForItemInGroup(groupId) {
+        setFormMode('ITEM');
+        const select = document.getElementById('input-group-id');
+        if (select) select.value = groupId;
+
+        toggleMobileForm(true);
+
+        const input = document.getElementById('input-item-name');
+        if (input) {
+          setTimeout(() => input.focus(), 150);
+        }
+      }
+
+      function toggleItem(id) {
+        const groups = data[activeList].groups;
+        for (let g of groups) {
+          const item = g.items.find(i => i.id === id);
+          if (item) {
+            item.isChecked = !item.isChecked;
+            saveData();
+            render();
+            break;
           }
         }
+      }
 
-        function updateCleanupButton() {
-          let count = 0;
-          groups.forEach(g => g.items.forEach(i => { if(i.isChecked) count++; }));
-          const btn = document.getElementById('btn-cleanup');
-          const countSpan = document.getElementById('cleanup-count');
-          const inactiveClasses = ['bg-slate-100', 'text-slate-400', 'cursor-not-allowed'];
-          const activeClasses = ['bg-red-50', 'text-red-600', 'hover:bg-red-100', 'focus:ring-red-500'];
-          if (count > 0) {
-            btn.disabled = false;
-            btn.classList.remove(...inactiveClasses);
-            btn.classList.add(...activeClasses);
-            countSpan.textContent = `(${count})`;
-            countSpan.style.display = 'inline';
-          } else {
-            btn.disabled = true;
-            btn.classList.remove(...activeClasses);
-            btn.classList.add(...inactiveClasses);
-            countSpan.textContent = '';
-            countSpan.style.display = 'none';
+      function toggleRepeat(id, e) {
+        if (e) e.stopPropagation();
+        const groups = data[activeList].groups;
+        for (let g of groups) {
+          const item = g.items.find(i => i.id === id);
+          if (item) {
+            item.isRepeat = !item.isRepeat;
+            saveData();
+            render();
+            break;
           }
         }
+      }
 
-        function handleAddItem(e) {
-          e.preventDefault();
-          const nameInput = document.getElementById('input-item-name');
-          const groupSelect = document.getElementById('input-group-id');
-          const isRepeatInput = document.getElementById('input-is-repeat');
-          const name = nameInput.value.trim();
-          const groupId = groupSelect.value;
-          if (!name || !groupId) return;
-          const groupIndex = groups.findIndex(g => g.id === groupId);
-          if (groupIndex === -1) return;
-          const newItem = {
-            id: generateId(),
-            name: name,
-            isChecked: false,
-            isRepeat: isRepeatInput.checked,
-            groupId: groupId
-          };
-          groups[groupIndex].items.unshift(newItem);
-          saveData();
-          render(); 
-          nameInput.value = '';
-          isRepeatInput.checked = false;
-          toggleRepeatStyle(false);
-          nameInput.focus();
-        }
-
-        function handleAddGroup(e) {
-          e.preventDefault();
-          const nameInput = document.getElementById('input-group-name');
-          const name = nameInput.value.trim();
-          if (!name) return;
-          const newGroup = {
-            id: generateId(),
-            name: name,
-            items: [],
-            color: 'slate'
-          };
-          groups.push(newGroup);
-          saveData();
-          nameInput.value = '';
-          render();
-          nameInput.focus();
-          
-          setTimeout(() => {
-             document.getElementById('input-group-id').value = newGroup.id;
-          }, 0);
-        }
-
-        function openFormForItemInGroup(groupId) {
-          setFormMode('ITEM');
-          const select = document.getElementById('input-group-id');
-          if (select) select.value = groupId;
-          
-          toggleMobileForm(true);
-          
-          const input = document.getElementById('input-item-name');
-          if (input) {
-            setTimeout(() => input.focus(), 150);
-          }
-        }
-
-        function toggleItem(id) {
-          for (let g of groups) {
-            const item = g.items.find(i => i.id === id);
-            if (item) {
-              item.isChecked = !item.isChecked;
-              saveData();
-              render();
-              break;
-            }
-          }
-        }
-
-        function toggleRepeat(id, e) {
-          if(e) e.stopPropagation();
-          for (let g of groups) {
-            const item = g.items.find(i => i.id === id);
-            if (item) {
-              item.isRepeat = !item.isRepeat;
-              saveData();
-              render();
-              break;
-            }
-          }
-        }
-
-        function cleanupItems() {
-          groups.forEach(group => {
-            const newItems = [];
-            group.items.forEach(item => {
-              if (item.isChecked) {
-                if (item.isRepeat) {
-                  item.isChecked = false;
-                  newItems.push(item);
-                }
-              } else {
+      function cleanupItems() {
+        const groups = data[activeList].groups;
+        groups.forEach(group => {
+          const newItems = [];
+          group.items.forEach(item => {
+            if (item.isChecked) {
+              if (item.isRepeat) {
+                item.isChecked = false;
                 newItems.push(item);
               }
-            });
-            group.items = newItems;
+            } else {
+              newItems.push(item);
+            }
           });
-          saveData();
-          render();
-        }
+          group.items = newItems;
+        });
+        saveData();
+        render();
+      }
 
-        function deleteGroup(id) {
-          const group = groups.find(g => g.id === id);
-          if (!group) return false;
-          if (group.items.length > 0) {
-            alert('商品が入っている場所は削除できません。\n先に商品を削除するか、別の場所に移動してください。');
-            return false;
-          }
-          groups = groups.filter(g => g.id !== id);
-          saveData();
-          render();
-          return true;
+      function deleteGroup(id) {
+        const groups = data[activeList].groups;
+        const group = groups.find(g => g.id === id);
+        if (!group) return false;
+        if (group.items.length > 0) {
+          alert('商品が入っている場所は削除できません。\n先に商品を削除するか、別の場所に移動してください。');
+          return false;
         }
+        data[activeList].groups = groups.filter(g => g.id !== id);
+        saveData();
+        render();
+        return true;
+      }
 
-        function openEditModal(groupId) {
-          editingGroupId = groupId;
-          const group = groups.find(g => g.id === groupId);
-          if (!group) return;
-          editingColor = group.color || 'slate';
-          document.getElementById('edit-group-name').value = group.name;
-          renderColorPicker();
-          const modal = document.getElementById('edit-modal');
-          modal.classList.remove('hidden');
-          requestAnimationFrame(() => modal.classList.add('active'));
-        }
+      function openEditModal(groupId) {
+        const groups = data[activeList].groups;
+        editingGroupId = groupId;
+        const group = groups.find(g => g.id === groupId);
+        if (!group) return;
+        editingColor = group.color || 'slate';
+        document.getElementById('edit-group-name').value = group.name;
+        renderColorPicker();
+        const modal = document.getElementById('edit-modal');
+        modal.classList.remove('hidden');
+        requestAnimationFrame(() => modal.classList.add('active'));
+      }
 
-        function closeModal() {
-          const modal = document.getElementById('edit-modal');
-          modal.classList.remove('active');
-          setTimeout(() => modal.classList.add('hidden'), 200);
-          editingGroupId = null;
-        }
+      function closeModal() {
+        const modal = document.getElementById('edit-modal');
+        modal.classList.remove('active');
+        setTimeout(() => modal.classList.add('hidden'), 200);
+        editingGroupId = null;
+      }
 
-        function renderColorPicker() {
-          const container = document.getElementById('color-picker-container');
-          container.innerHTML = COLOR_KEYS.map(c => `
+      function renderColorPicker() {
+        const container = document.getElementById('color-picker-container');
+        container.innerHTML = COLOR_KEYS.map(c => `
             <button onclick="app.setEditColor('${c}')" class="w-8 h-8 rounded-full shadow-sm transition-all flex items-center justify-center ${COLORS[c].bg.replace('bg-', 'bg-').replace('50', '500')} ${editingColor === c ? 'ring-2 ring-offset-2 ring-slate-400 scale-110' : 'hover:scale-110 opacity-70 hover:opacity-100'}">
               ${editingColor === c ? '<i data-lucide="check" class="w-4 h-4 text-white"></i>' : ''}
             </button>
           `).join('');
-          lucide.createIcons();
-        }
+        lucide.createIcons();
+      }
 
-        function setEditColor(c) {
-          editingColor = c;
-          renderColorPicker();
-        }
+      function setEditColor(c) {
+        editingColor = c;
+        renderColorPicker();
+      }
 
-        function saveGroupEdit() {
-          if (!editingGroupId) return;
-          const name = document.getElementById('edit-group-name').value.trim();
-          if (name) {
-            const group = groups.find(g => g.id === editingGroupId);
-            if (group) {
-              group.name = name;
-              group.color = editingColor;
-              saveData();
-              render();
+      function saveGroupEdit() {
+        if (!editingGroupId) return;
+        const groups = data[activeList].groups;
+        const name = document.getElementById('edit-group-name').value.trim();
+        if (name) {
+          const group = groups.find(g => g.id === editingGroupId);
+          if (group) {
+            group.name = name;
+            group.color = editingColor;
+            saveData();
+            render();
+          }
+        }
+        closeModal();
+      }
+
+      function deleteCurrentGroup() {
+        if (editingGroupId) {
+          if (deleteGroup(editingGroupId)) {
+            closeModal();
+          }
+        }
+      }
+
+      function toggleMobileForm(show) {
+        const fab = document.getElementById('fab-btn');
+        const panel = document.getElementById('form-panel');
+        if (show) {
+          fab.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+          panel.classList.remove('translate-y-[110%]');
+          panel.classList.add('translate-y-0');
+          if (window.innerWidth < 768) {
+            setTimeout(() => document.getElementById('input-item-name').focus(), 100);
+          }
+        } else {
+          fab.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+          panel.classList.add('translate-y-[110%]');
+          panel.classList.remove('translate-y-0');
+        }
+      }
+
+      function setFormMode(mode) {
+        const tabItem = document.getElementById('tab-item');
+        const tabGroup = document.getElementById('tab-group');
+        const formItem = document.getElementById('form-item');
+        const formGroup = document.getElementById('form-group');
+        if (mode === 'ITEM') {
+          tabItem.classList.replace('border-transparent', 'border-primary');
+          tabItem.classList.replace('text-slate-400', 'text-primary');
+          tabGroup.classList.replace('border-primary', 'border-transparent');
+          tabGroup.classList.replace('text-primary', 'text-slate-400');
+          formItem.classList.remove('hidden');
+          formGroup.classList.add('hidden');
+        } else {
+          tabGroup.classList.replace('border-transparent', 'border-primary');
+          tabGroup.classList.replace('text-slate-400', 'text-primary');
+          tabItem.classList.replace('border-primary', 'border-transparent');
+          tabItem.classList.replace('text-primary', 'text-slate-400');
+          formGroup.classList.remove('hidden');
+          formItem.classList.add('hidden');
+        }
+      }
+
+      function toggleRepeatStyle(checked) {
+        const label = document.getElementById('label-repeat');
+        if (checked) {
+          label.classList.add('bg-indigo-50', 'border-indigo-200', 'text-indigo-700');
+          label.classList.remove('bg-white', 'border-slate-200', 'text-slate-300');
+        } else {
+          label.classList.remove('bg-indigo-50', 'border-indigo-200', 'text-indigo-700');
+          label.classList.add('bg-white', 'border-slate-200', 'text-slate-300');
+        }
+      }
+
+      function escapeHtml(text) {
+        if (!text) return text;
+        return text
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function initDragAndDrop() {
+        const container = document.getElementById('groups-container');
+        new Sortable(container, {
+          handle: '.js-group-drag-handle',
+          animation: 150,
+          ghostClass: 'sortable-ghost',
+          dragClass: 'sortable-drag',
+          onEnd: function (evt) {
+            const groups = data[activeList].groups;
+            const newOrderIds = Array.from(container.children).map(el => el.getAttribute('data-group-id'));
+            const newGroups = [];
+            newOrderIds.forEach(id => {
+              const g = groups.find(x => x.id === id);
+              if (g) newGroups.push(g);
+            });
+            data[activeList].groups = newGroups;
+            saveData();
+          }
+        });
+      }
+
+      function initItemSortables() {
+        const itemLists = document.querySelectorAll('.items-list');
+        itemLists.forEach(list => {
+          new Sortable(list, {
+            group: 'shared-items',
+            handle: '.item-handle',
+            draggable: '.item-row',
+            animation: 150,
+            ghostClass: 'sortable-ghost',
+            dragClass: 'sortable-drag',
+            onEnd: function (evt) {
+              const groups = data[activeList].groups;
+              const itemEl = evt.item;
+              const itemId = itemEl.getAttribute('data-item-id');
+              const fromGroupId = evt.from.getAttribute('data-group-id');
+              const toGroupId = evt.to.getAttribute('data-group-id');
+              const newIndex = evt.newIndex;
+              const fromGroup = groups.find(g => g.id === fromGroupId);
+              const toGroup = groups.find(g => g.id === toGroupId);
+              if (fromGroup && toGroup) {
+                const itemIndex = fromGroup.items.findIndex(i => i.id === itemId);
+                if (itemIndex > -1) {
+                  const [movedItem] = fromGroup.items.splice(itemIndex, 1);
+                  movedItem.groupId = toGroupId;
+                  toGroup.items.splice(newIndex, 0, movedItem);
+                  saveData();
+                }
+              }
+              if (fromGroup && fromGroup.items.length === 0) {
+                evt.from.innerHTML = createEmptyPlaceholderHTML(fromGroupId);
+                lucide.createIcons();
+              }
+              const ph = evt.to.querySelector('.empty-placeholder');
+              if (ph) {
+                ph.remove();
+              }
             }
-          }
-          closeModal();
-        }
+          });
+        });
+      }
 
-        function deleteCurrentGroup() {
-          if (editingGroupId) {
-            if (deleteGroup(editingGroupId)) {
-              closeModal();
-            }
-          }
-        }
+      function switchList(listType) {
+        activeList = listType;
+        saveData();
+        render();
+        updateHeaderTitle();
+      }
 
-        function toggleMobileForm(show) {
-          const fab = document.getElementById('fab-btn');
-          const panel = document.getElementById('form-panel');
-          if (show) {
-            fab.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
-            panel.classList.remove('translate-y-[110%]');
-            panel.classList.add('translate-y-0');
-            if(window.innerWidth < 768) {
-               setTimeout(() => document.getElementById('input-item-name').focus(), 100);
-            }
-          } else {
-            fab.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
-            panel.classList.add('translate-y-[110%]');
-            panel.classList.remove('translate-y-0');
-          }
-        }
+      function updateTabButtons() {
+        const shoppingTab = document.getElementById('tab-shopping');
+        const wishlistTab = document.getElementById('tab-wishlist');
 
-        function setFormMode(mode) {
-          const tabItem = document.getElementById('tab-item');
-          const tabGroup = document.getElementById('tab-group');
-          const formItem = document.getElementById('form-item');
-          const formGroup = document.getElementById('form-group');
-          if (mode === 'ITEM') {
-            tabItem.classList.replace('border-transparent', 'border-primary');
-            tabItem.classList.replace('text-slate-400', 'text-primary');
-            tabGroup.classList.replace('border-primary', 'border-transparent');
-            tabGroup.classList.replace('text-primary', 'text-slate-400');
-            formItem.classList.remove('hidden');
-            formGroup.classList.add('hidden');
-          } else {
-            tabGroup.classList.replace('border-transparent', 'border-primary');
-            tabGroup.classList.replace('text-slate-400', 'text-primary');
-            tabItem.classList.replace('border-primary', 'border-transparent');
-            tabItem.classList.replace('text-primary', 'text-slate-400');
-            formGroup.classList.remove('hidden');
-            formItem.classList.add('hidden');
-          }
-        }
+        const activeClasses = ['bg-primary', 'text-white', 'shadow-sm'];
+        const inactiveClasses = ['bg-slate-100', 'text-slate-500', 'hover:bg-slate-200'];
 
-        function toggleRepeatStyle(checked) {
-           const label = document.getElementById('label-repeat');
-           if (checked) {
-              label.classList.add('bg-indigo-50', 'border-indigo-200', 'text-indigo-700');
-              label.classList.remove('bg-white', 'border-slate-200', 'text-slate-300');
-           } else {
-              label.classList.remove('bg-indigo-50', 'border-indigo-200', 'text-indigo-700');
-              label.classList.add('bg-white', 'border-slate-200', 'text-slate-300');
-           }
+        if (activeList === 'shopping') {
+          shoppingTab.classList.add(...activeClasses);
+          shoppingTab.classList.remove(...inactiveClasses);
+          wishlistTab.classList.remove(...activeClasses);
+          wishlistTab.classList.add(...inactiveClasses);
+        } else {
+          wishlistTab.classList.add(...activeClasses);
+          wishlistTab.classList.remove(...inactiveClasses);
+          shoppingTab.classList.remove(...activeClasses);
+          shoppingTab.classList.add(...inactiveClasses);
         }
-        
-        function escapeHtml(text) {
-          if (!text) return text;
-          return text
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+      }
+
+      function updateHeaderTitle() {
+        const titleEl = document.getElementById('header-title');
+        const iconEl = document.getElementById('header-icon');
+
+        if (activeList === 'shopping') {
+          titleEl.textContent = '買い物リスト';
+          iconEl.setAttribute('data-lucide', 'shopping-cart');
+        } else {
+          titleEl.textContent = '欲しいものリスト';
+          iconEl.setAttribute('data-lucide', 'heart');
         }
+        lucide.createIcons();
+      }
 
-        function initDragAndDrop() {
-           const container = document.getElementById('groups-container');
-           new Sortable(container, {
-             handle: '.js-group-drag-handle',
-             animation: 150,
-             ghostClass: 'sortable-ghost',
-             dragClass: 'sortable-drag',
-             onEnd: function(evt) {
-               const newOrderIds = Array.from(container.children).map(el => el.getAttribute('data-group-id'));
-               const newGroups = [];
-               newOrderIds.forEach(id => {
-                 const g = groups.find(x => x.id === id);
-                 if (g) newGroups.push(g);
-               });
-               groups = newGroups;
-               saveData();
-             }
-           });
-        }
+      return {
+        init,
+        toggleMobileForm,
+        setFormMode,
+        handleAddItem,
+        handleAddGroup,
+        toggleRepeatStyle,
+        toggleItem,
+        toggleRepeat,
+        cleanupItems,
+        deleteGroup,
+        openEditModal,
+        closeModal,
+        setEditColor,
+        saveGroupEdit,
+        deleteCurrentGroup,
+        openFormForItemInGroup,
+        switchList
+      };
+    })();
 
-        function initItemSortables() {
-           const itemLists = document.querySelectorAll('.items-list');
-           itemLists.forEach(list => {
-             new Sortable(list, {
-               group: 'shared-items',
-               handle: '.item-handle',
-               draggable: '.item-row',
-               animation: 150,
-               ghostClass: 'sortable-ghost',
-               dragClass: 'sortable-drag',
-               onEnd: function(evt) {
-                 const itemEl = evt.item;
-                 const itemId = itemEl.getAttribute('data-item-id');
-                 const fromGroupId = evt.from.getAttribute('data-group-id');
-                 const toGroupId = evt.to.getAttribute('data-group-id');
-                 const newIndex = evt.newIndex;
-                 const fromGroup = groups.find(g => g.id === fromGroupId);
-                 const toGroup = groups.find(g => g.id === toGroupId);
-                 if (fromGroup && toGroup) {
-                    const itemIndex = fromGroup.items.findIndex(i => i.id === itemId);
-                    if (itemIndex > -1) {
-                        const [movedItem] = fromGroup.items.splice(itemIndex, 1);
-                        movedItem.groupId = toGroupId;
-                        toGroup.items.splice(newIndex, 0, movedItem);
-                        saveData();
-                    }
-                 }
-                 if (fromGroup && fromGroup.items.length === 0) {
-                     evt.from.innerHTML = createEmptyPlaceholderHTML(fromGroupId);
-                     lucide.createIcons();
-                 }
-                 const ph = evt.to.querySelector('.empty-placeholder');
-                 if (ph) {
-                     ph.remove();
-                 }
-               }
-             });
-           });
-        }
+    document.addEventListener('DOMContentLoaded', app.init);
+  </script>
 
-        return {
-          init,
-          toggleMobileForm,
-          setFormMode,
-          handleAddItem,
-          handleAddGroup,
-          toggleRepeatStyle,
-          toggleItem,
-          toggleRepeat,
-          cleanupItems,
-          deleteGroup,
-          openEditModal,
-          closeModal,
-          setEditColor,
-          saveGroupEdit,
-          deleteCurrentGroup,
-          openFormForItemInGroup
-        };
-      })();
-
-      document.addEventListener('DOMContentLoaded', app.init);
-    </script>
-  
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(console.error);
-  });
-}
-</script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(console.error);
+      });
+    }
+  </script>
 
 </body>
+
 </html>
